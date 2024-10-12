@@ -40,8 +40,22 @@ local function anticheatDisabler()
 end
 
 anticheatDisabler()
-task.wait(10)
+task.wait(3)
 getgenv().SecureMode = true
+
+local function spoofVehicleIdentity(Thing, Index, Value)
+    for i, v in pairs(workspace.Vehicles:GetChildren()) do
+        if v["Control_Values"].Owner.Value == game.Players.LocalPlayer.Name then
+            local module = require(v["Drive Controller"])
+            
+            if module[Thing] then
+                module[Thing][Index] = Value
+            else
+                --print("Error: '"..Thing.."' not found in the module.")
+            end
+        end
+    end
+end
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
@@ -64,8 +78,9 @@ Rayfield:Notify({
 local Tab1 = Window:CreateTab("Character", 4483362458)
 local Tab2 = Window:CreateTab("Bypasses", 4483362458)
 local Tab3 = Window:CreateTab("Farming", 4483362458)
-local Tab4 = Window:CreateTab("Teletransporation", 4483362458)
-local Tab5 = Window:CreateTab("Weapons", 4483362458)
+local Tab4 = Window:CreateTab("Vehicles", 4483362458)
+local Tab5 = Window:CreateTab("Teletransportation", 4483362458)
+local Tab6 = Window:CreateTab("Weapons", 4483362458)
 
 
 local walkSpeed = 16
@@ -76,6 +91,7 @@ local isSprinting = false
 local Section1 = Tab1:CreateSection("Humanoid")
 local Section2 = Tab2:CreateSection("Mods")
 local Section3 = Tab3:CreateSection("Robberies")
+local Section4 = Tab4:CreateSection("Legit Ratios")
 
 local function applyWalkSpeed()
     if game.Players.LocalPlayer.Character then
@@ -147,7 +163,151 @@ local Button1 = Tab1:CreateButton({
     end,
 })
 
-local Button2 = Tab5:CreateButton({
+local Slider4 = Tab6:CreateSlider({
+    Name = "Fire Rate",
+    Range = { 0, 5 },
+    Increment = 0.1,
+    Suffix = "FireRate",
+    CurrentValue = 1,
+    Flag = "FireRateSlider",
+    Callback = function(Value)
+        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+            if v:FindFirstChild("WeaponRoot") then
+                local a1 = require(game:GetService("ReplicatedStorage").Shared.WeaponStats[v.Name])
+                a1["FireRate"] = Value
+            else
+                 for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                    if v:FindFirstChild("WeaponRoot") then
+                        local a2 = require(game:GetService("ReplicatedStorage").Shared.WeaponStats[v.Name])
+                        a2["FireRate"] = Value
+                    end
+                 end
+            end
+        end
+     end,
+})
+
+local Slider5 = Tab6:CreateSlider({
+    Name = "Aim Speed",
+    Range = { 0, 5 },
+    Increment = 0.1,
+    Suffix = "AimSpeed",
+    CurrentValue = 5,
+    Flag = "AimSpeedSlider",
+    Callback = function(Value)
+        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+            if v:FindFirstChild("WeaponRoot") then
+                local a1 = require(game:GetService("ReplicatedStorage").Shared.WeaponStats[v.Name])
+                a1["AimSpeed"] = Value
+            else
+                 for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                    if v:FindFirstChild("WeaponRoot") then
+                        local a2 = require(game:GetService("ReplicatedStorage").Shared.WeaponStats[v.Name])
+                        a2["AimSpeed"] = Value
+                    end
+                 end
+            end
+        end
+     end,
+})
+
+local Slider6 = Tab6:CreateSlider({
+    Name = "Reload Speed",
+    Range = { 0.1, 5 },
+    Increment = 0.1,
+    Suffix = "ReloadSpeed",
+    CurrentValue = 3.5,
+    Flag = "ReloadSpeedSlider",
+    Callback = function(Value)
+        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+            if v:FindFirstChild("WeaponRoot") then
+                local a1 = require(game:GetService("ReplicatedStorage").Shared.WeaponStats[v.Name])
+                a1["ReloadSpeed"] = Value
+            else
+                 for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                    if v:FindFirstChild("WeaponRoot") then
+                        local a2 = require(game:GetService("ReplicatedStorage").Shared.WeaponStats[v.Name])
+                        a2["ReloadSpeed"] = Value
+                    end
+                 end
+            end
+        end
+     end,
+})
+
+local Slider7 = Tab6:CreateSlider({
+    Name = "Clip Ammo",
+    Range = { 1, 600 },
+    Increment = 2,
+    Suffix = "ClipAmmo",
+    CurrentValue = 30,
+    Flag = "ClipAmmoSlider",
+    Callback = function(Value)
+        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+            if v:FindFirstChild("WeaponRoot") then
+                local a1 = require(game:GetService("ReplicatedStorage").Shared.WeaponStats[v.Name])
+                a1["ClipAmmo"] = Value
+            else
+                 for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                    if v:FindFirstChild("WeaponRoot") then
+                        local a2 = require(game:GetService("ReplicatedStorage").Shared.WeaponStats[v.Name])
+                        a2["ClipAmmo"] = Value
+                    end
+                 end
+            end
+        end
+     end,
+})
+
+local Slider8 = Tab6:CreateSlider({
+    Name = "Total Ammo",
+    Range = { 1, 800 },
+    Increment = 2,
+    Suffix = "TotalAmmo",
+    CurrentValue = 240,
+    Flag = "TotalAmmoSlider",
+    Callback = function(Value)
+        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+            if v:FindFirstChild("WeaponRoot") then
+                local a1 = require(game:GetService("ReplicatedStorage").Shared.WeaponStats[v.Name])
+                a1["TotalAmmo"] = Value
+            else
+                 for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                    if v:FindFirstChild("WeaponRoot") then
+                        local a2 = require(game:GetService("ReplicatedStorage").Shared.WeaponStats[v.Name])
+                        a2["TotalAmmo"] = Value
+                    end
+                 end
+            end
+        end
+     end,
+})
+
+local Slider9 = Tab6:CreateSlider({
+    Name = "Field of View",
+    Range = { 1, 800 },
+    Increment = 2,
+    Suffix = "FOV",
+    CurrentValue = 40,
+    Flag = "FOVSlider",
+    Callback = function(Value)
+        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+            if v:FindFirstChild("WeaponRoot") then
+                local a1 = require(game:GetService("ReplicatedStorage").Shared.WeaponStats[v.Name])
+                a1["FOV"] = Value
+            else
+                 for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                    if v:FindFirstChild("WeaponRoot") then
+                        local a2 = require(game:GetService("ReplicatedStorage").Shared.WeaponStats[v.Name])
+                        a2["FOV"] = Value
+                    end
+                 end
+            end
+        end
+     end,
+})
+
+local Button2 = Tab6:CreateButton({
     Name = "Infinite Hit",
     Callback = function()
         local remote = game:GetService("ReplicatedStorage"):WaitForChild("FE"):WaitForChild("Weapons"):WaitForChild("Landed")
@@ -261,13 +421,13 @@ local Button7 = Tab3:CreateButton({
             
             if wantedLevel ~= 0 then
                 teleportAndArrest(v)
-                task.wait(1)
+                task.wait(0.1)
             end
         end
     end,
 })
 
-local Button8 = Tab4:CreateButton({
+local Button8 = Tab5:CreateButton({
     Name = "Teleport to nearest house",
     Callback = function()
         local houses = workspace.Houses:GetChildren()
@@ -290,7 +450,7 @@ local Button8 = Tab4:CreateButton({
     end,
 })
 
-local Button9 = Tab4:CreateButton({
+local Button9 = Tab5:CreateButton({
     Name = "Teleport to nearest ATM",
     Callback = function()
         local atms = workspace.ATMs:GetChildren()
@@ -313,7 +473,7 @@ local Button9 = Tab4:CreateButton({
     end,
 })
 
-local Button9 = Tab4:CreateButton({
+local Button10 = Tab5:CreateButton({
     Name = "Teleport to nearest Cash Register",
     Callback = function()
         local atms = workspace.CashRegisters:GetChildren()
@@ -335,6 +495,103 @@ local Button9 = Tab4:CreateButton({
         end
     end,
 })
+
+local Button11 = Tab5:CreateButton({
+    Name = "Teleport to nearest Lockpick House Bill",
+    Callback = function()
+        local houseRobbery = workspace:FindFirstChild("HouseRobbery")
+        
+        if houseRobbery and #houseRobbery:GetChildren() > 0 then
+            local atms = houseRobbery:GetChildren()
+            local playerPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+            local nearestATM = nil
+            local shortestDistance = math.huge
+            local hasBills = false  -- Track if any corresponding bills are found
+            
+            for _, atm in pairs(atms) do
+                -- Ensure 'StartingPlayer' exists and matches the LocalPlayer
+                if atm:FindFirstChild("StartingPlayer") and atm.StartingPlayer.Value == game.Players.LocalPlayer then
+                    hasBills = true  -- Set this to true if the player has bills
+                    local targetPart = atm:FindFirstChild("Part")  -- Replace 'Part' with the correct part name
+                    if targetPart then
+                        local distance = (targetPart.Position - playerPosition).Magnitude
+                        if distance < shortestDistance then
+                            shortestDistance = distance
+                            nearestATM = targetPart
+                        end
+                    end
+                end
+            end
+
+            if nearestATM then
+                task.wait(0.5)
+                -- Teleport to the nearest ATM part
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = nearestATM.CFrame
+            elseif not hasBills then
+                -- Notify only if no bills were found
+                Rayfield:Notify({
+                    Title = "Cheat Notification",
+                    Content = "There are no robbery bills corresponding to you.",
+                    Duration = 6.5,
+                    Image = 4483362458,
+                    Actions = { Ignore = { Name = "Aw!", Callback = function() end } },
+                })
+            end
+        else
+            -- No bills in the robbery area at all
+            Rayfield:Notify({
+                Title = "Cheat Notification",
+                Content = "No robbery bills found.",
+                Duration = 6.5,
+                Image = 4483362458,
+                Actions = { Ignore = { Name = "Aw!", Callback = function() end } },
+            })
+        end
+    end,
+})
+local Button12 = Tab4:CreateButton({
+    Name = "2011 Chevlon Amigo LZR",
+    Callback = function()
+        spoofVehicleIdentity("Ratios", 1, 5.1)
+        spoofVehicleIdentity("Ratios", 2, 0)
+        spoofVehicleIdentity("Ratios", 3, 5.550000000000001)
+        spoofVehicleIdentity("Ratios", 4, 3.75)
+        spoofVehicleIdentity("Ratios", 5, 2.625)
+        spoofVehicleIdentity("Ratios", 6, 1.875)
+        spoofVehicleIdentity("Ratios", 7, 1.125)
+        spoofVehicleIdentity("Ratios", 8, 0.87)
+    end,
+})
+
+local Button13 = Tab4:CreateButton({
+    Name = "2014 Chevlon Corbeta TZ",
+    Callback = function()
+        spoofVehicleIdentity("Ratios", 1, 5.1)
+        spoofVehicleIdentity("Ratios", 2, 0)
+        spoofVehicleIdentity("Ratios", 3, 5.550000000000001)
+        spoofVehicleIdentity("Ratios", 4, 3.75)
+        spoofVehicleIdentity("Ratios", 5, 2.625)
+        spoofVehicleIdentity("Ratios", 6, 1.875)
+        spoofVehicleIdentity("Ratios", 7, 1.2000000000000002)
+        spoofVehicleIdentity("Ratios", 8, 0.75)
+    end,
+})
+
+
+local Button14 = Tab4:CreateButton({
+    Name = "2021 Falcon Heritage",
+    Callback = function()
+        spoofVehicleIdentity("Ratios", 1, 5.1)
+        spoofVehicleIdentity("Ratios", 2, 0)
+        spoofVehicleIdentity("Ratios", 3, 5.550000000000001)
+        spoofVehicleIdentity("Ratios", 4, 3.75)
+        spoofVehicleIdentity("Ratios", 5, 2.625)
+        spoofVehicleIdentity("Ratios", 6, 1.875)
+        spoofVehicleIdentity("Ratios", 7, 1.125)
+        spoofVehicleIdentity("Ratios", 8, 0.8999999999999999)
+    end,
+})
+
 
 local function matchHexCode()
     local selectingCode = selectingCodeLabel.Text
