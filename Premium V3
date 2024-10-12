@@ -1,0 +1,335 @@
+local HWID = game:GetService("RbxAnalyticsService"):GetClientId()
+if HWID == "E21D05B2-3440-4DF6-A620-CACB7024F7BE" or "A37B4632-1514-4FF4-BF67-AA0BEFC851BD" then
+local function anticheatDisabler()
+    for _, v in pairs(game:GetDescendants()) do
+        if v:IsA("RemoteEvent") and v.Name == "RemoteEvent" then
+            v:Destroy()
+        end
+    end
+
+    local gameAnalyticsError = game:GetService("ReplicatedStorage"):FindFirstChild("GameAnalyticsError")
+    if gameAnalyticsError then
+        gameAnalyticsError:Destroy()
+    end
+
+    local FE = game:GetService("ReplicatedStorage"):WaitForChild("FE")
+    local postMemory = FE:FindFirstChild("PostMemory")
+    if postMemory then
+        postMemory:Destroy()
+    end
+
+    local postFPS = FE:FindFirstChild("PostFPS")
+    if postFPS then
+        postFPS:Destroy()
+    end
+
+    local Blacklist_Args = { "HEI", "HLa", "itH", "QQr", "qBm" }
+    local NetworkOldFire
+    NetworkOldFire = hookfunction(require(game:GetService("ReplicatedStorage").Modules.Network).Fire, function(...)
+        local Args = { ... }
+        for _, v in next, Args do
+            if table.find(Blacklist_Args, v) then
+                return
+            end
+        end
+        if Args[1] == "PlaySFX" then
+            return
+        end
+        return NetworkOldFire(table.unpack(Args))
+    end)
+end
+
+anticheatDisabler()
+task.wait(10)
+getgenv().SecureMode = true
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Window = Rayfield:CreateWindow({
+    Name = "Liberty County",
+    LoadingTitle = "Loading you in...",
+    LoadingSubtitle = "by printidentity & brick_playz for Bypass Dev",
+    ConfigurationSaving = { Enabled = true, FileName = "ERLC_Cheat" },
+    Discord = { Enabled = false, Invite = "noinvitelink", RememberJoins = true },
+    KeySystem = false,
+})
+
+Rayfield:Notify({
+    Title = "Cheat Notification",
+    Content = "Anti Cheat has been successfully tampered with.",
+    Duration = 6.5,
+    Image = 4483362458,
+    Actions = { Ignore = { Name = "Good to know.", Callback = function() end } },
+})
+
+local Tab1 = Window:CreateTab("Character", 4483362458)
+local Tab2 = Window:CreateTab("Bypasses", 4483362458)
+local Tab3 = Window:CreateTab("Farming", 4483362458)
+local Tab4 = Window:CreateTab("Weapons", 4483362458)
+
+
+local walkSpeed = 16
+local sprintSpeed = 50
+local jumpPower = 50
+local isSprinting = false
+
+local Section1 = Tab1:CreateSection("Humanoid")
+local Section2 = Tab2:CreateSection("Mods")
+local Section3 = Tab3:CreateSection("Robberies")
+
+local function applyWalkSpeed()
+    if game.Players.LocalPlayer.Character then
+        local humanoid = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.WalkSpeed = walkSpeed
+        end
+    end
+end
+
+local function applyJumpPower()
+    if game.Players.LocalPlayer.Character then
+        local humanoid = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.JumpPower = jumpPower
+        end
+    end
+end
+
+local Slider1 = Tab1:CreateSlider({
+    Name = "Walk Speed",
+    Range = { 0, 350 },
+    Increment = 3,
+    Suffix = "WalkSpeed",
+    CurrentValue = walkSpeed,
+    Flag = "WalkSpeedSlider",
+    Callback = function(Value)
+        walkSpeed = Value
+        applyWalkSpeed()
+    end,
+})
+
+local Slider2 = Tab1:CreateSlider({
+    Name = "Sprint Speed",
+    Range = { 0, 350 },
+    Increment = 3,
+    Suffix = "SprintSpeed",
+    CurrentValue = sprintSpeed,
+    Flag = "SprintSpeedSlider",
+    Callback = function(Value)
+        sprintSpeed = Value
+    end,
+})
+
+local Slider3 = Tab1:CreateSlider({
+    Name = "Jump Power",
+    Range = { 0, 350 },
+    Increment = 3,
+    Suffix = "JumpPower",
+    CurrentValue = jumpPower,
+    Flag = "JumpPowerSlider",
+    Callback = function(Value)
+        jumpPower = Value
+        applyJumpPower()
+    end,
+})
+
+local Button1 = Tab1:CreateButton({
+    Name = "Reset to default",
+    Callback = function()
+        Slider1:Set(16)
+        Slider2:Set(23)
+        Slider3:Set(50)
+        walkSpeed = 16
+        sprintSpeed = 50
+        jumpPower = 50
+        applyWalkSpeed()
+        applyJumpPower()
+    end,
+})
+
+local Button2 = Tab4:CreateButton({
+    Name = "Infinite Hit",
+    Callback = function()
+        local remote = game:GetService("ReplicatedStorage"):WaitForChild("FE"):WaitForChild("Weapons"):WaitForChild("Landed")
+        local old
+        old = hookmetamethod(game, "__namecall", function(self, ...)
+            local args = {...}
+            if self == remote and getnamecallmethod() == "FireServer" then
+                args[2] = math.huge
+                return old(self, table.unpack(args))
+            end
+            return old(self, ...)
+        end)
+    end,
+})
+
+local Button3 = Tab2:CreateButton({
+    Name = "Anti Fall Damage",
+    Callback = function()
+        local remote = game:GetService("ReplicatedStorage"):WaitForChild("FE"):WaitForChild("Actions"):WaitForChild("Environmental")
+        local oldNamecall
+        oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+            if self == remote and getnamecallmethod() == "FireServer" then
+                return nil 
+            end
+            return oldNamecall(self, ...)
+        end)
+    end,
+})
+
+
+local Button4 = Tab3:CreateButton({
+    Name = "Always Success Lockpick & Jewelery",
+    Callback = function()
+local NetworkOldFire
+NetworkOldFire = hookfunction(require(game:GetService("ReplicatedStorage").Modules.Network).Fire, function(...)
+    local Args = {...}
+    if Args[1] == "GlassCutting" then
+        Args[3] = true
+    end
+    return NetworkOldFire(table.unpack(Args))
+end)
+local NetworkOldFire2
+NetworkOldFire2 = hookfunction(require(game:GetService("ReplicatedStorage").Modules.Network).Fire, function(...)
+    local Args2 = {...}
+    if Args2[1] == "Lockpick" then
+        Args2[3] = true
+    end
+    return NetworkOldFire2(table.unpack(Args2))
+end)
+    end,
+})
+
+local Button6 = Tab3:CreateButton({
+    Name = "Auto ATM",
+    Callback = function()
+    local player = game:GetService("Players").LocalPlayer
+local atmHacking = player.PlayerGui.GameMenus.ATM.Hacking
+local selectingCodeLabel = atmHacking.SelectingCode
+
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local lastConnection
+
+local function instantClickNearUI(element)
+    local posX = element.AbsolutePosition.X + element.AbsoluteSize.X / 2
+    local posY = element.AbsolutePosition.Y + element.AbsoluteSize.Y / 2
+
+    VirtualInputManager:SendMouseButtonEvent(posX, posY, 0, true, game, 0)
+    VirtualInputManager:SendMouseButtonEvent(posX, posY, 0, false, game, 0)
+end
+
+local Section3 = Tab3:CreateSection("Police")
+
+local Button5 = Tab3:CreateButton({
+    Name = "Arrest Wanted People",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local FE = ReplicatedStorage:WaitForChild("FE")
+
+        local function teleportAndArrest(player)
+            while player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") do
+                local wantedCharacter = player.Character:FindFirstChild("HumanoidRootPart")
+                local myCharacter = Players.LocalPlayer.Character
+                if wantedCharacter and myCharacter then
+                    myCharacter.HumanoidRootPart.CFrame = wantedCharacter.CFrame
+                end
+
+                FE:WaitForChild("UseHandcuffs"):InvokeServer("Handcuff", player)
+                task.wait(0.1)
+                FE:WaitForChild("UseHandcuffs"):InvokeServer("Arrest", player)
+
+                local wantedLevel = FE:WaitForChild("GetWantedLevel"):InvokeServer(player)
+                if wantedLevel == 0 then
+                    break
+                end
+                task.wait(0.1)
+            end
+        end
+
+        for i, v in pairs(Players:GetPlayers()) do
+            local wantedLevel = FE:WaitForChild("GetWantedLevel"):InvokeServer(v)
+            
+            if wantedLevel ~= 0 then
+                teleportAndArrest(v)
+                task.wait(1)
+            end
+        end
+    end,
+})
+
+local function matchHexCode()
+    local selectingCode = selectingCodeLabel.Text
+
+    if lastConnection then
+        lastConnection:Disconnect()
+    end
+
+    for i = 1, 4 do
+        local list = atmHacking.CycleFrame["List" .. i]
+
+        for _, hexLabel in pairs(list:GetChildren()) do
+            if hexLabel:IsA("TextLabel") and hexLabel.Name == "HexCode" and hexLabel.Text == selectingCode then
+
+                lastConnection = hexLabel:GetPropertyChangedSignal("TextColor3"):Connect(function()
+                    if hexLabel.TextColor3 == Color3.new(0, 0, 0) then
+                        instantClickNearUI(hexLabel)
+                        lastConnection:Disconnect()
+                        selectingCode = selectingCodeLabel.Text
+                    end
+                end)
+            end
+        end
+    end
+end
+
+while true do
+    matchHexCode()
+    wait(0.01)
+end
+    end,
+})
+
+local UIS = game:GetService("UserInputService")
+
+UIS.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.LeftShift then
+        isSprinting = true
+        applyWalkSpeed()
+        if game.Players.LocalPlayer.Character then
+            local humanoid = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.WalkSpeed = sprintSpeed
+            end
+        end
+    end
+end)
+
+UIS.InputEnded:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.LeftShift then
+        isSprinting = false
+        applyWalkSpeed()
+    end
+end)
+
+local player = game.Players.LocalPlayer
+
+local function updateJumpPower(character)
+    local humanoid = character:WaitForChild("Humanoid")
+    humanoid.Jumped:Connect(function()
+        humanoid.JumpPower = jumpPower
+    end)
+end
+
+local function onCharacterAdded(character)
+    character:WaitForChild("Humanoid")
+    updateJumpPower(character)
+end
+
+player.CharacterAdded:Connect(onCharacterAdded)
+
+if player.Character then
+    onCharacterAdded(player.Character)
+end
+else
+game.Players.LocalPlayer:Kick("Not whitelisted.")
+end
