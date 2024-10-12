@@ -1,5 +1,40 @@
 local HWID = game:GetService("RbxAnalyticsService"):GetClientId()
 if HWID == "E21D05B2-3440-4DF6-A620-CACB7024F7BE" or "A37B4632-1514-4FF4-BF67-AA0BEFC851BD" then
+game:GetService("ReplicatedStorage"):WaitForChild("FE"):WaitForChild("Chat"):FireServer("AntiCheat bypass | Made by printidentity")
+task.wait(0.5)
+game:GetService("ReplicatedStorage"):WaitForChild("FE"):WaitForChild("Chat"):FireServer("Guardian.dll | Spoofed memory stack at #254bBhA1")
+local Network = require(game:GetService("ReplicatedStorage").Modules.Network)
+
+local NetworkOldFire
+NetworkOldFire = hookfunction(Network.Fire, function(...)
+    local Args = {...}
+    if Args[1] ~= "Heartbeat" then
+        print("Network Fire!")
+        for _,v in Args do
+            print(_,v)
+        end
+    end
+    return NetworkOldFire(table.unpack(Args))
+end)
+local NetworkOldFired
+NetworkOldFired = hookfunction(Network.Fired, function(...)
+    local Args = {...}
+    print("Network Fired!")
+    for _,v in Args do
+        print(_,v)
+    end
+    return NetworkOldFired(table.unpack(Args))
+end)
+
+local NetworkOldInvoke
+NetworkOldInvoke = hookfunction(Network.Invoke, function(...)
+    local Args = {...}
+    print("Network Invoke!")
+    for _,v in Args do
+        print(_,v)
+    end
+    return NetworkOldInvoke(table.unpack(Args))
+end)
 local function anticheatDisabler()
     for _, v in pairs(game:GetDescendants()) do
         if v:IsA("RemoteEvent") and v.Name == "RemoteEvent" then
@@ -214,6 +249,7 @@ local function spoofVehicleIdentity2(Thing, Value)
 end
 end
 
+getgenv().SecureMode = true
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
     Name = "Liberty County",
