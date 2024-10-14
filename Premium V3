@@ -683,13 +683,10 @@ local ButtonPolicePriv = Tab3:CreateButton({
 
                         if myCharacter and myCharacter:FindFirstChild("HumanoidRootPart") then
                             myCharacter.HumanoidRootPart.CFrame = targetHumanoidRootPart.CFrame
-                            task.wait()
-
                             FE:WaitForChild("UseHandcuffs"):InvokeServer("Handcuff", v)
-                            
                             task.wait()
-
                             FE:WaitForChild("UseHandcuffs"):InvokeServer("Arrest", v)
+                            task.wait()
                         end
                     end
                 end
