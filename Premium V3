@@ -627,7 +627,7 @@ local function instantClickNearUI(element)
     VirtualInputManager:SendMouseButtonEvent(posX, posY, 0, false, game, 0)
 end
 
-local Section3 = Tab3:CreateSection("Police")
+local SectionRandom = Tab3:CreateSection("Police")
 
 local runningPolice = false
 local Button7 = Tab3:CreateButton({
@@ -662,6 +662,45 @@ local Button7 = Tab3:CreateButton({
         end
     end,
 })
+
+local SectionRandom2 = Tab3:CreateSection("Private Server")
+local RunningPolice2 = false
+local ButtonPolicePriv = Tab3:CreateButton({
+    Name = "Arrest All",
+    Callback = function()
+        RunningPolice2 = not RunningPolice2
+
+        local Players = game:GetService("Players")
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local FE = ReplicatedStorage:WaitForChild("FE")
+
+        while RunningPolice2 do
+            for _, v in pairs(Players:GetPlayers()) do
+                if v.Team and v.Team.Name == "Civilian" then
+                    if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                        local targetHumanoidRootPart = v.Character.HumanoidRootPart
+                        local myCharacter = Players.LocalPlayer.Character
+
+                        if myCharacter and myCharacter:FindFirstChild("HumanoidRootPart") then
+                            myCharacter.HumanoidRootPart.CFrame = targetHumanoidRootPart.CFrame
+                            task.wait()
+
+                            FE:WaitForChild("UseHandcuffs"):InvokeServer("Handcuff", v)
+                            
+                            task.wait()
+
+                            FE:WaitForChild("UseHandcuffs"):InvokeServer("Arrest", v)
+                        end
+                    end
+                end
+            end
+            task.wait()
+        end
+    end,
+})
+
+
+
 
 local Button8 = Tab5:CreateButton({
     Name = "Teleport to nearest house",
