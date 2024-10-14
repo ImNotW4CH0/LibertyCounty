@@ -1,8 +1,15 @@
 local HWID = game:GetService("RbxAnalyticsService"):GetClientId()
 if HWID == "E21D05B2-3440-4DF6-A620-CACB7024F7BE" or "A37B4632-1514-4FF4-BF67-AA0BEFC851BD" then
-game:GetService("ReplicatedStorage"):WaitForChild("FE"):WaitForChild("Chat"):FireServer("AntiCheat bypass | Made by printidentity")
-task.wait(0.5)
-game:GetService("ReplicatedStorage"):WaitForChild("FE"):WaitForChild("Chat"):FireServer("Guardian.dll | Spoofed memory stack at #254bBhA1")
+local function randomString(length)
+    local chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    local result = ""
+    for _ = 1, length do
+        local randIndex = math.random(1, #chars)
+        result = result .. chars:sub(randIndex, randIndex)
+    end
+    return result
+end
+game:GetService("ReplicatedStorage"):WaitForChild("FE"):WaitForChild("Chat"):FireServer(randomString(12))
 local Network = require(game:GetService("ReplicatedStorage").Modules.Network)
 
 local NetworkOldFire
@@ -622,40 +629,36 @@ end
 
 local Section3 = Tab3:CreateSection("Police")
 
+local runningPolice = false
 local Button7 = Tab3:CreateButton({
     Name = "Arrest Wanted People",
     Callback = function()
-        local Players = game:GetService("Players")
-        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-        local FE = ReplicatedStorage:WaitForChild("FE")
+        runningPolice = not runningPolice
+        while runningPolice do
+            local Players = game:GetService("Players")
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+            local FE = ReplicatedStorage:WaitForChild("FE")
 
-        local function teleportAndArrest(player)
-            while player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") do
-                local wantedCharacter = player.Character:FindFirstChild("HumanoidRootPart")
-                local myCharacter = Players.LocalPlayer.Character
-                if wantedCharacter and myCharacter then
-                    myCharacter.HumanoidRootPart.CFrame = wantedCharacter.CFrame
+            for _, v in pairs(Players:GetPlayers()) do
+                local wantedLevel = FE:WaitForChild("GetWantedLevel"):InvokeServer(v)
+                if wantedLevel ~= 0 then
+                    while v and v.Character and v.Character:FindFirstChild("HumanoidRootPart") do
+                        local target = v.Character.HumanoidRootPart
+                        local myChar = Players.LocalPlayer.Character
+                        if target and myChar then
+                            myChar.HumanoidRootPart.CFrame = target.CFrame
+                        end
+                        FE:WaitForChild("UseHandcuffs"):InvokeServer("Handcuff", v)
+                        task.wait()
+                        FE:WaitForChild("UseHandcuffs"):InvokeServer("Arrest", v)
+                        if FE:WaitForChild("GetWantedLevel"):InvokeServer(v) == 0 then
+                            break
+                        end
+                        task.wait()
+                    end
                 end
-
-                FE:WaitForChild("UseHandcuffs"):InvokeServer("Handcuff", player)
-                task.wait(0.1)
-                FE:WaitForChild("UseHandcuffs"):InvokeServer("Arrest", player)
-
-                local wantedLevel = FE:WaitForChild("GetWantedLevel"):InvokeServer(player)
-                if wantedLevel == 0 then
-                    break
-                end
-                task.wait(0.1)
             end
-        end
-
-        for i, v in pairs(Players:GetPlayers()) do
-            local wantedLevel = FE:WaitForChild("GetWantedLevel"):InvokeServer(v)
-            
-            if wantedLevel ~= 0 then
-                teleportAndArrest(v)
-                task.wait(0.1)
-            end
+            task.wait()
         end
     end,
 })
