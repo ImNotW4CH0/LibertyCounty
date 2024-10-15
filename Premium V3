@@ -692,6 +692,7 @@ local ButtonPolicePriv = Tab3:CreateButton({
                     end
                 end
             end
+            task.wait(0.1)
         end
     end,
 })
